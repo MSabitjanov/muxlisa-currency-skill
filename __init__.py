@@ -6,6 +6,9 @@ class CurrencyRate(MycroftSkill):
     def __init__(self):
         MycroftSkill.__init__(self)
 
+    def initialize(self):
+        self.register_entity_file("amount.entity")
+
     @intent_handler("ExchangeRate.intent")
     def handle_exchange_rate(self, message):
         currency = message.data.get("currency_a")
@@ -29,6 +32,8 @@ class CurrencyRate(MycroftSkill):
         currency_from = message.data.get("currency_a")
         currency_to = message.data.get("currency_b")
 
+        self.log.warning(f"Salooooom: Amount-{amount} Currency_a-{currency_from} Currency_b-{currency_to}")
+        print(currency_to)
         message = CurrencyExchangeRate(
             amount=amount, currency_from=currency_from, currency_to=currency_to
         )

@@ -52,32 +52,52 @@ class CurrencyExchangeRate:
 
     def get_converted_currency(self):
         currency_from = self._extract_currency(self.currency_from)
-        currency_to = self._extract_currency(self.currency_to)
+        amount = float(self.amount)
+
         try:
             currency_from_rate = float(currency_from["Rate"])
-            currency_to_rate = float(currency_to["Rate"])
-            amount = float(self.amount)
-        except ValueError:
-            self.message.updata(
+        except (ValueError, TypeError):
+            self.message.update(
                 data="Qiymatni tushunaolmadim, aniqroq aytishga harakat qiling!",
                 is_error=True,
             )
             return self.message
 
-        converted_amount = round((currency_from_rate / currency_to_rate) * amount, 2)
-        self.message.update(
-            currency_from_name=currency_from["CcyNm_UZ"],
-            currency_to_name=currency_to["CcyNm_UZ"],
-            amount=self.amount,
-            converted_amount=converted_amount,
-            is_error=False,
-        )
+        if self.currency_to.lower() == "som":
+            converted_amount = round(amount * currency_from_rate, 2)
+            self.message.update(
+                currency_from_name=currency_from["CcyNm_UZ"],
+                currency_to_name="Som",
+                amount=self.amount,
+                converted_amount=converted_amount,
+                is_error=False,
+            )
+        else:
+            currency_to = self._extract_currency(self.currency_to)
+            try:
+                currency_to_rate = float(currency_to["Rate"])
+            except (ValueError, TypeError):
+                self.message.update(
+                    data="Qiymatni tushunaolmadim, aniqroq aytishga harakat qiling!",
+                    is_error=True,
+                )
+                return self.message
+
+            converted_amount = round((currency_from_rate / currency_to_rate) * amount, 2)
+            self.message.update(
+                currency_from_name=currency_from["CcyNm_UZ"],
+                currency_to_name=currency_to["CcyNm_UZ"],
+                amount=self.amount,
+                converted_amount=converted_amount,
+                is_error=False,
+            )
+
         return self.message
 
 
 if __name__ == "__main__":
     message = CurrencyExchangeRate(
-        currency_from="dollar", currency_to="Angliya funt sterlingi", amount=20
+        currency_from="dollar", currency_to="som", amount=20
     )
     message = message.get_converted_currency()
     print(message)

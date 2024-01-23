@@ -1,3 +1,1 @@
-{amount} {currency_a} (qancha bo'ladi | nech pul | necha pul) (bo'ladi)
-{amount} {currency_a} {currency_b} o'gir
-{amount} {currency_a} {currency_b} (qancha bo'ladi | nech pul bo'ladi)
+{amount} {currency_a}  (nechchi | nechi | netchi | necha) {currency_b} (bo'ladi | )
