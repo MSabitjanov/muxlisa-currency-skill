@@ -63,7 +63,7 @@ class CurrencyExchangeRate:
             )
             return self.message
 
-        if self.currency_to.lower() == "som":
+        if self.currency_to.lower() == "som" or self.currency_to.lower() == "so'm":
             converted_amount = round(amount * currency_from_rate, 2)
             self.message.update(
                 currency_from_name=currency_from["CcyNm_UZ"],
